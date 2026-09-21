@@ -1,5 +1,9 @@
 import pathlib
 from victim.file import File
+import socket
+
+#def connect_to_Ariel(ip, port):
+
 
 
 def get_all_files(path):
@@ -17,3 +21,14 @@ def get_all_files(path):
 
     return all_files
 
+def main():
+    print("now starting main....")
+    #ip ="192.168.1.188"
+    # port = 8080
+    # sock = connect_to_Ariel(ip, port)
+
+
+
+
+if __name__ == "__main__":
+    main()
