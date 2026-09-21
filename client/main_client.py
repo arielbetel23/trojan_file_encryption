@@ -1,8 +1,7 @@
+import socket
 import pathlib
+from cryptography.hazmat.primitives import serialization
 from client.file import File
-import socket
-
-import socket
 
 
 def connect_to_server(public_ip, port):
@@ -11,30 +10,27 @@ def connect_to_server(public_ip, port):
     return client_socket
 
 
-
 def get_all_files(path):
     all_files = []
-    dir = pathlib.Path(path)
+    dir_path = pathlib.Path(path)
 
-    for item in dir.iterdir():
+    for item in dir_path.rglob("*"):
         if item.is_file():
-            file_name = item.name
-            file_path = str(item.resolve())
-            file_size = item.stat().st_size
-            all_files.append(File(file_name, file_path, file_size))
-        else:
-            all_files += get_all_files(item)
+            all_files.append(File(item.name, str(item.resolve()), item.stat().st_size))
 
     return all_files
+
 
 def main():
     print("now starting main....")
     server_public_ip = "SERVER_PUBLIC_IP"
     port = 8080
+
     server_sock = connect_to_server(server_public_ip, port)
+    public_key_bytes = server_sock.recv(4096)
 
-
-
+    rsa_public_key = serialization.load_pem_public_key(public_key_bytes)
+    print("Public key received and loaded successfully!")
 
 
 if __name__ == "__main__":
