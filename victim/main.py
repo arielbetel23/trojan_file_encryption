@@ -1,5 +1,5 @@
 import pathlib
-from file import File
+from victim.file import File
 
 
 def get_all_files(path):
