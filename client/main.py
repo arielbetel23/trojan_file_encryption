@@ -1,5 +1,5 @@
 import pathlib
-from victim.file import File
+from client.file import File
 import socket
 
 import socket
