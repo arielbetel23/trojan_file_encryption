@@ -1,4 +1,4 @@
-class file:
+class File:
     def __init__(self, name, path, size):
         self.name = name
         self.path = path
