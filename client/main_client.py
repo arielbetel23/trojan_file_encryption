@@ -26,10 +26,6 @@ def get_all_files(path):
     return all_files
 
 
-def encrypt_file(nonce, file, associated_data=None):
-
-
-
 def main():
     print("now starting main....")
     server_public_ip = "SERVER_PUBLIC_IP"
