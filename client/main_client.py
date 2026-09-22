@@ -10,7 +10,8 @@ import base64
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.backends import default_backend
-
+from dotenv import load_dotenv
+load_dotenv()
 
 
 
@@ -61,7 +62,7 @@ def encrypt_aes_key(aes_key_bytes, public_key_pem):
 
 def main():
     print("now starting main....")
-    server_public_ip = "SERVER_PUBLIC_IP"
+    server_public_ip = os.getenv("SERVER_PUBLIC_IP")
     port = 8080
 
     server_sock = connect_to_server(server_public_ip, port)
