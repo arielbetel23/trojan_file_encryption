@@ -55,3 +55,41 @@ class File:
 
         os.remove(self.path)
         os.rename(temp_path, self.path)
+
+    def decrypt_chunk(self, chunk, key, iv):
+        if not hasattr(self, '_decryptor'):
+            cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
+            self._decryptor = cipher.decryptor()
+            self._unpadder = padding.PKCS7(128).unpadder()
+
+        decrypted_padded_chunk = self._decryptor.update(chunk)
+        return self._unpadder.update(decrypted_padded_chunk)
+
+    def finish_decryption(self):
+        if hasattr(self, '_decryptor'):
+            decrypted_padded_chunk = self._decryptor.finalize()
+            result = self._unpadder.update(decrypted_padded_chunk) + self._unpadder.finalize()
+            del self._decryptor
+            del self._unpadder
+            return result
+        return b""
+
+    def decrypt_file(self, key):
+        temp_path = self.path + ".tmp"
+
+        with open(self.path, "rb") as in_file, open(temp_path, "wb") as out_file:
+            iv = in_file.read(16)
+
+            while True:
+                chunk = in_file.read(8192)
+                if not chunk:
+                    break
+
+                decrypted_bytes = self.decrypt_chunk(chunk, key, iv)
+                out_file.write(decrypted_bytes)
+
+            final_bytes = self.finish_decryption()
+            out_file.write(final_bytes)
+
+        os.remove(self.path)
+        os.rename(temp_path, self.path)
