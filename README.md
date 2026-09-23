@@ -31,8 +31,8 @@ the project follows a precise flow to make sure it is secured and works well. He
 
 **server:**
 
-1. receives encrypted AES key
-2. decrypts AES key using RSA private key=
+4. receives encrypted AES key
+5. decrypts AES key using RSA private key=
 ![flow chart](encryption_flow_chart.png)
 
 **local storage**
