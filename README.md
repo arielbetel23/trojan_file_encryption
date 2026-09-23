@@ -32,7 +32,8 @@ the project follows a precise flow to make sure it is secured and works well. He
 **server:**
 
 1. receives encrypted AES key
-2. decrypts AES key using RSA private key
+2. decrypts AES key using RSA private key=
+![flow chart](encryption_flow_chart.png)
 
 **local storage**
 
@@ -45,7 +46,6 @@ as mentioned in the flow, we save the RSA private keys locally, however this isn
 
 The username of the victim is basically his username on his windows account.
 
-![flow chart](encryption_flow_chart.png)
 
 **Attack destination**
 
